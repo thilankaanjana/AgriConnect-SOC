@@ -1,0 +1,43 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SiteMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AgriConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+<form id="form1" runat="server">
+<div class="app">
+    <aside class="side">
+       <a class="brand" href="<%= ResolveUrl("~/Default.aspx") %>" title="Go to home page" style="text-decoration:none;color:inherit;display:flex;">
+    <%= UIHelper.Icon("sprout", 26) %>
+    <div><div class="bt">Agri<em>Connect</em></div><small>AGRICULTURAL SERVICE PLATFORM</small></div>
+</a>
+        <asp:Literal ID="litNav" runat="server" />
+        <asp:LinkButton ID="btnReset" runat="server" CssClass="nav" CausesValidation="false" Visible="false"
+            OnClick="btnReset_Click" OnClientClick="return confirm('Reset all prototype data to the sample records?');">&#8634; Reset Demo Data</asp:LinkButton>
+    </aside>
+    <main class="main">
+        <div class="top">
+            <strong>AgriConnect / <asp:Literal ID="litCrumb" runat="server" /></strong>
+            <div style="display:flex;gap:8px;align-items:center">
+                <asp:HyperLink ID="lnkBell" runat="server" CssClass="btn alt small" NavigateUrl="~/Notifications.aspx" Visible="false" />
+                <span class="pill"><asp:Literal ID="litUser" runat="server" /></span>
+                <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn alt small" CausesValidation="false" Visible="false" OnClick="btnLogout_Click">Log Out</asp:LinkButton>
+            </div>
+        </div>
+        <div class="content">
+            <div class="notice">Demo build: only the login accounts contain sample data. Everything else is empty until you add it.</div>
+            <asp:Panel ID="pnlMsg" runat="server" Visible="false" CssClass="msg">
+                <asp:Literal ID="litMsg" runat="server" />
+            </asp:Panel>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+    </main>
+</div>
+</form>
+</body>
+</html>

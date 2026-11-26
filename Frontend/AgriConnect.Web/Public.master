@@ -1,0 +1,178 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Public.master.cs" Inherits="PublicMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AgriConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@800&display=swap" rel="stylesheet" />
+    <link href="~/Content/Public.css" rel="stylesheet" />
+</head>
+<body>
+<form id="form1" runat="server">
+
+<header class="hdr"><div class="hdr-in">
+    <a class="logo" href="<%= ResolveUrl("~/Default.aspx") %>">
+        <%= UIHelper.Icon("sprout", 28) %><span>Agri<em>Connect</em></span>
+    </a>
+    <asp:Panel ID="pnlSearch" runat="server" DefaultButton="btnSearch" CssClass="search">
+        <%= UIHelper.Icon("search") %>
+        <asp:TextBox ID="txtSearch" runat="server" placeholder="Search crops, farmers, locations..." />
+        <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="sr-only" CausesValidation="false" OnClick="btnSearch_Click" />
+    </asp:Panel>
+    <div class="sortpill">
+        <span class="sp-l">Sort by</span>
+        <asp:DropDownList ID="ddlSort" runat="server" AutoPostBack="true" CausesValidation="false" OnSelectedIndexChanged="ddlSort_Changed">
+            <asp:ListItem Value="newest" Text="Newest" />
+            <asp:ListItem Value="priceasc" Text="Price: Low to High" />
+            <asp:ListItem Value="pricedesc" Text="Price: High to Low" />
+        </asp:DropDownList>
+    </div>
+    <asp:PlaceHolder ID="phGuest" runat="server">
+        <button type="button" class="btn ghost" onclick="openModal('login')">Log In</button>
+        <button type="button" class="btn" onclick="openModal('register')">Sign Up</button>
+    </asp:PlaceHolder>
+    <asp:PlaceHolder ID="phUser" runat="server" Visible="false">
+        <span class="pill"><asp:Literal ID="litUser" runat="server" /></span>
+        <asp:HyperLink ID="lnkDash" runat="server" CssClass="btn" Text="Dashboard" />
+        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn ghost" CausesValidation="false" OnClick="btnLogout_Click">Log Out</asp:LinkButton>
+    </asp:PlaceHolder>
+</div></header>
+
+<asp:ContentPlaceHolder ID="MainContent" runat="server" />
+
+<footer class="foot"><div class="wrap">
+    <div class="foot-in">
+        <div>
+            <a class="logo" href="<%= ResolveUrl("~/Default.aspx") %>"><%= UIHelper.Icon("sprout", 26) %><span>Agri<em>Connect</em></span></a>
+            <p>An agricultural service platform connecting farmers, suppliers and agriculture officers.</p>
+        </div>
+        <div><h4>Marketplace</h4><a href="~/Default.aspx#market" runat="server">Browse crops</a><a href="~/Default.aspx#guidelines" runat="server">Guidelines</a></div>
+        <div><h4>Join</h4><a href="#" onclick="openModal('register');return false;">Sign up as farmer / supplier</a><a href="#" onclick="openModal('login');return false;">Log in</a></div>
+    </div>
+</div></footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ LOGIN (role is detected from the account) ============ -->
+<div class="overlay" id="modal-login">
+    <div class="modal">
+        <div class="mh"><h3>Log in to AgriConnect</h3><button type="button" class="x" onclick="closeModals()"><%= UIHelper.Icon("x", 20) %></button></div>
+        <asp:Panel ID="pnlLogin" runat="server" DefaultButton="btnLogin">
+           <div class="field">
+    <asp:Label runat="server" AssociatedControlID="txtLoginPhone" Text="Username" />
+    <asp:TextBox ID="txtLoginPhone" runat="server" TextMode="Phone" ClientIDMode="Static" placeholder="Mobile number, e.g. 0771234567" autocomplete="username" />
+    <asp:RequiredFieldValidator runat="server" ControlToValidate="txtLoginPhone" ValidationGroup="login" ErrorMessage="Username (mobile number) is required" CssClass="err" Display="Dynamic" />
+    <asp:RegularExpressionValidator runat="server" ControlToValidate="txtLoginPhone" ValidationGroup="login" ValidationExpression="^(\+?94|0)?7\d{8}$" ErrorMessage="Enter a valid mobile number, e.g. 0771234567" CssClass="err" Display="Dynamic" />
+</div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtLoginPass" Text="Password" />
+                <div class="pw">
+                    <asp:TextBox ID="txtLoginPass" runat="server" placeholder="Enter your password" TextMode="Password" ClientIDMode="Static" autocomplete="current-password" />
+                    <button type="button" class="eye" title="Show password" onclick="var t=this.previousElementSibling,s=t.type==='password';t.type=s?'text':'password';this.classList.toggle('on',s);this.title=s?'Hide password':'Show password';"><%= UIHelper.Icon("eye", 20) %></button>
+                </div>
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtLoginPass" ValidationGroup="login" ErrorMessage="Password is required" CssClass="err" Display="Dynamic" />
+            </div>
+            <asp:Label ID="lblLoginInfo" runat="server" CssClass="okmsg" EnableViewState="false" />
+            <asp:Label ID="lblLoginError" runat="server" CssClass="err" EnableViewState="false" />
+            <asp:Button ID="btnLogin" runat="server" Text="Log In" CssClass="btn block" ValidationGroup="login" OnClick="btnLogin_Click" />
+        </asp:Panel>
+        <div class="mfoot">New here? <a onclick="openModal('register')">Sign up</a></div>
+    </div>
+</div>
+
+<!-- ============ REGISTER (Farmer / Supplier) ============ -->
+<div class="overlay" id="modal-register">
+    <div class="modal">
+        <div class="mh"><h3>Create an account</h3><button type="button" class="x" onclick="closeModals()"><%= UIHelper.Icon("x", 20) %></button></div>
+        <asp:Panel ID="pnlRegister" runat="server" DefaultButton="btnRegister">
+            <div class="seg" id="seg-register" data-hidden="hdnRegRole">
+                <button type="button" data-role="Farmer" class="on" onclick="setRole(this)">Farmer</button>
+                <button type="button" data-role="Supplier" onclick="setRole(this)">Supplier</button>
+            </div>
+            <asp:HiddenField ID="hdnRegRole" runat="server" Value="Farmer" ClientIDMode="Static" />
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegName" Text="Full name / Business name" />
+                <asp:TextBox ID="txtRegName" runat="server" placeholder="e.g. Kamal Silva" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegName" ValidationGroup="reg" ErrorMessage="Name is required" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegEmail" Text="Email" />
+                <asp:TextBox ID="txtRegEmail" runat="server" placeholder="e.g. kamal@example.com" TextMode="Email" autocomplete="email" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegEmail" ValidationGroup="reg" ErrorMessage="Email is required" CssClass="err" Display="Dynamic" />
+                <asp:RegularExpressionValidator runat="server" ControlToValidate="txtRegEmail" ValidationGroup="reg" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ErrorMessage="Enter a valid email address" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegContact" Text="Mobile number" />
+                <asp:TextBox ID="txtRegContact" runat="server" TextMode="Phone" placeholder="0771234567" autocomplete="tel" />
+                <span class="fhint">A verification code (OTP) will be sent to this number by SMS.</span>
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegContact" ValidationGroup="reg" ErrorMessage="Mobile number is required" CssClass="err" Display="Dynamic" />
+                <asp:RegularExpressionValidator runat="server" ControlToValidate="txtRegContact" ValidationGroup="reg" ValidationExpression="^(\+?94|0)?7\d{8}$" ErrorMessage="Enter a valid mobile number, e.g. 0771234567" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="ddlRegDistrict" Text="District (requests are routed by district)" />
+                <asp:DropDownList ID="ddlRegDistrict" runat="server" CssClass="sel" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlRegDistrict" InitialValue="" ValidationGroup="reg" ErrorMessage="Select your district" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegAddress" Text="Address" />
+                <asp:TextBox ID="txtRegAddress" runat="server" placeholder="e.g. 25, Temple Road, Kurunegala" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegAddress" ValidationGroup="reg" ErrorMessage="Address is required" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegPass" Text="Password" />
+                <div class="pw">
+                    <asp:TextBox ID="txtRegPass" runat="server" placeholder="At least 6 characters" TextMode="Password" autocomplete="new-password" />
+                    <button type="button" class="eye" title="Show password" onclick="var t=this.previousElementSibling,s=t.type==='password';t.type=s?'text':'password';this.classList.toggle('on',s);this.title=s?'Hide password':'Show password';"><%= UIHelper.Icon("eye", 20) %></button>
+                </div>
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegPass" ValidationGroup="reg" ErrorMessage="Password is required" CssClass="err" Display="Dynamic" />
+                <asp:RegularExpressionValidator runat="server" ControlToValidate="txtRegPass" ValidationGroup="reg" ValidationExpression=".{6,}" ErrorMessage="Password must be at least 6 characters" CssClass="err" Display="Dynamic" />
+            </div>
+            <div class="field">
+                <asp:Label runat="server" AssociatedControlID="txtRegPass2" Text="Confirm password" />
+                <div class="pw">
+                    <asp:TextBox ID="txtRegPass2" runat="server" placeholder="Re-enter your password" TextMode="Password" autocomplete="new-password" />
+                    <button type="button" class="eye" title="Show password" onclick="var t=this.previousElementSibling,s=t.type==='password';t.type=s?'text':'password';this.classList.toggle('on',s);this.title=s?'Hide password':'Show password';"><%= UIHelper.Icon("eye", 20) %></button>
+                </div>
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRegPass2" ValidationGroup="reg" ErrorMessage="Please confirm your password" CssClass="err" Display="Dynamic" />
+                <asp:CompareValidator runat="server" ControlToValidate="txtRegPass2" ControlToCompare="txtRegPass" Operator="Equal" ValidationGroup="reg" ErrorMessage="The two passwords do not match" CssClass="err" Display="Dynamic" />
+            </div>
+            <asp:Label ID="lblRegError" runat="server" CssClass="err" EnableViewState="false" />
+            <asp:Button ID="btnRegister" runat="server" Text="Register" CssClass="btn block" ValidationGroup="reg" OnClick="btnRegister_Click" />
+        </asp:Panel>
+        <div class="mfoot">Have an account? <a onclick="openModal('login')">Log in</a></div>
+        <p class="hint">New accounts are checked by the administrator. You can log in after your account is approved. Administrator accounts are created by an administrator.</p>
+    </div>
+</div>
+
+<!-- ============ OTP (sent to the user's mobile number) ============ -->
+<div class="overlay" id="modal-otp">
+    <div class="modal">
+        <div class="mh"><h3>Verify it&#8217;s you</h3><button type="button" class="x" onclick="closeModals()"><%= UIHelper.Icon("x", 20) %></button></div>
+        <asp:Panel ID="pnlOtp" runat="server" DefaultButton="btnVerify">
+            <div class="shield"><%= UIHelper.Icon("shield", 44) %></div>
+            <p class="otp-t"><asp:Label ID="lblOtpPhone" runat="server" Text="Enter the 6-digit code sent to your mobile number." /></p>
+            <div class="otp-row">
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+                <input type="text" class="otp" maxlength="1" inputmode="numeric" autocomplete="off" />
+            </div>
+            <asp:HiddenField ID="hdnOtp" runat="server" ClientIDMode="Static" />
+            <asp:Label ID="lblOtpInfo" runat="server" CssClass="okmsg" EnableViewState="false" />
+            <asp:Label ID="lblOtpError" runat="server" CssClass="err" EnableViewState="false" />
+            <asp:Button ID="btnVerify" runat="server" Text="Verify & Continue" CssClass="btn block" CausesValidation="false" OnClientClick="return mergeOtp();" OnClick="btnVerify_Click" />
+            <div class="otp-links">
+                <span><asp:LinkButton ID="btnResend" runat="server" CssClass="linkbtn resend" CausesValidation="false" OnClientClick="return resendReady();" OnClick="btnResend_Click">Resend code</asp:LinkButton><span id="resendTimer" class="rtimer"></span></span>
+                <button type="button" class="linkbtn" onclick="openModal('login')">&larr; Back</button>
+            </div>
+        </asp:Panel>
+    </div>
+</div>
+
+<script src='<%= ResolveUrl("~/Content/site.js") %>'></script>
+</form>
+</body>
+</html>
