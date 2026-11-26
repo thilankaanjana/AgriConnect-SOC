@@ -1,0 +1,446 @@
+
+@host = https://localhost:7234
+
+### 1. AdminService Health Test
+GET {{host}}/health
+
+
+### 2. Admin Login - Valid Format
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": "TestPass123!"
+}
+
+
+### 3. Admin Login - Invalid Mobile
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "123",
+  "password": "TestPass123!"
+}
+
+
+### 4. Admin Login - Empty Password
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": ""
+}
+
+
+### 5. Verify Admin OTP - Valid Format
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123456"
+}
+
+
+### 6. Verify Admin OTP - Invalid Format
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123"
+}
+
+
+### 7. Resend Admin OTP
+POST {{host}}/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567"
+}
+
+
+### 8. Resend OTP - Invalid Mobile
+POST {{host}}/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "contact": "123"
+}
+
+
+
+### 9. Get All Registered Users
+GET {{host}}/api/admin/users
+
+
+### 10. Filter Farmers
+GET {{host}}/api/admin/users?role=Farmer
+
+
+### 11. Filter Suppliers
+GET {{host}}/api/admin/users?role=Supplier
+
+
+### 12. Filter Agriculture Officers
+GET {{host}}/api/admin/users?role=Officer
+
+
+### 13. Filter Administrators
+GET {{host}}/api/admin/users?role=Admin
+
+
+### 14. Create Officer Account
+POST {{host}}/api/admin/users
+Content-Type: application/json
+
+{
+  "name": "Nimal Perera",
+  "email": "officer@example.com",
+  "contact": "0771234567",
+  "password": "TestPass123!",
+  "role": "Officer",
+  "district": "Kurunegala"
+}
+
+
+### 15. Create Administrator Account
+POST {{host}}/api/admin/users
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "email": "admin@example.com",
+  "contact": "0777654321",
+  "password": "TestPass123!",
+  "role": "Admin",
+  "district": "Colombo"
+}
+
+
+### 16. Deactivate User
+PATCH {{host}}/api/admin/users/1/status
+Content-Type: application/json
+
+{
+  "status": "Inactive"
+}
+
+
+### 17. Activate User
+PATCH {{host}}/api/admin/users/1/status
+Content-Type: application/json
+
+{
+  "status": "Active"
+}
+
+
+### 18. Test Invalid Role for Account Creation
+POST {{host}}/api/admin/users
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "contact": "0771234567",
+  "password": "TestPass123!",
+  "role": "Farmer",
+  "district": "Kurunegala"
+}
+
+
+### 19. Test Invalid Account Status
+PATCH {{host}}/api/admin/users/1/status
+Content-Type: application/json
+
+{
+  "status": "Suspended"
+}
+
+
+### 20. Test Invalid Role Filter
+GET {{host}}/api/admin/users?role=Manager
+
+
+
+### 21. Get All Transactions
+GET {{host}}/api/admin/transactions
+
+
+### 22. Get Supply Request Transactions
+GET {{host}}/api/admin/transactions?type=Request
+
+
+### 23. Get Quotation Transactions
+GET {{host}}/api/admin/transactions?type=Quotation
+
+
+### 24. Get Confirmed Order Transactions
+GET {{host}}/api/admin/transactions?type=Order
+
+
+### 25. Get Buyer Crop Order Transactions
+GET {{host}}/api/admin/transactions?type=Sale
+
+
+### 26. Get Transaction Summary
+GET {{host}}/api/admin/transactions/summary
+
+
+### 27. Test Invalid Transaction Type
+GET {{host}}/api/admin/transactions?type=Payment
+
+
+### 28. Test Empty Transaction Filter
+GET {{host}}/api/admin/transactions?type=
+
+
+### 29. Test Public Health API
+GET {{host}}/health
+
+
+
+### 30. Get Complete Admin Analytics
+GET {{host}}/api/admin/analytics
+
+
+### 31. Get Analytics Summary
+GET {{host}}/api/admin/analytics/summary
+
+
+### 32. Get Users by Role
+GET {{host}}/api/admin/analytics/users-by-role
+
+
+### 33. Get Supply Requests by Status
+GET {{host}}/api/admin/analytics/requests-by-status
+
+
+### 34. Get Quotations by Status
+GET {{host}}/api/admin/analytics/quotations-by-status
+
+
+### 35. Get Deliveries Analytics
+GET {{host}}/api/admin/analytics/deliveries
+
+
+### 36. Get Requests by District
+GET {{host}}/api/admin/analytics/requests-by-district
+
+
+### 37. Get Marketplace Analytics
+GET {{host}}/api/admin/analytics/marketplace
+
+
+### 38. Test Public Health API
+GET {{host}}/health
+
+
+
+### 39. Get All Activity Logs
+GET {{host}}/api/admin/activity-log
+
+
+### 40. Filter Farmer Activities
+GET {{host}}/api/admin/activity-log?role=Farmer
+
+
+### 41. Filter Supplier Activities
+GET {{host}}/api/admin/activity-log?role=Supplier
+
+
+### 42. Filter Officer Activities
+GET {{host}}/api/admin/activity-log?role=Agriculture%20Officer
+
+
+### 43. Filter Administrator Activities
+GET {{host}}/api/admin/activity-log?role=Administrator
+
+
+### 44. Get First Page
+GET {{host}}/api/admin/activity-log?page=1&pageSize=25
+
+
+### 45. Get Second Page
+GET {{host}}/api/admin/activity-log?page=2&pageSize=25
+
+
+### 46. Get Recent Activities
+GET {{host}}/api/admin/activity-log/recent?limit=8
+
+
+### 47. Test Invalid Role Filter
+GET {{host}}/api/admin/activity-log?role=Manager
+
+
+### 48. Test Invalid Page Number
+GET {{host}}/api/admin/activity-log?page=0
+
+
+### 49. Test Invalid Page Size
+GET {{host}}/api/admin/activity-log?pageSize=200
+
+
+### 50. Test Invalid Recent Limit
+GET {{host}}/api/admin/activity-log/recent?limit=0
+
+
+### 51. Test Public Health API
+GET {{host}}/health
+
+
+
+
+### 52. Get Admin Dashboard
+GET {{host}}/api/admin/dashboard
+
+
+### 53. Test Admin Dashboard Without Token
+GET {{host}}/api/admin/dashboard
+
+
+### 54. Test Public Health API
+GET {{host}}/health
+
+
+
+### 65. Get My Notifications
+GET {{host}}/api/notifications
+
+
+### 66. Get Latest 4 Notifications
+GET {{host}}/api/notifications?limit=4
+
+
+### 67. Get Unread Notification Count
+GET {{host}}/api/notifications/unread-count
+
+
+### 68. Mark All Notifications as Read
+PATCH {{host}}/api/notifications/mark-read
+
+
+### 69. Test Invalid Notification Limit
+GET {{host}}/api/notifications?limit=0
+
+
+### 70. Test Public Health API
+GET {{host}}/health
+
+
+
+### 71. Shared Login - Valid Format
+POST https://localhost:7234/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": "TestPass123!"
+}
+
+
+### 72. Shared Login - Invalid Mobile
+POST https://localhost:7234/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "123",
+  "password": "TestPass123!"
+}
+
+
+### 73. Start Farmer Registration
+POST https://localhost:7234/api/auth/register/start
+Content-Type: application/json
+
+{
+  "role": "Farmer",
+  "name": "Nimal Perera",
+  "email": "farmer@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala",
+  "password": "TestPass123!"
+}
+
+
+### 74. Start Supplier Registration
+POST https://localhost:7234/api/auth/register/start
+Content-Type: application/json
+
+{
+  "role": "Supplier",
+  "name": "Lanka Agro Supplies",
+  "email": "supplier@example.com",
+  "contact": "0777654321",
+  "district": "Kurunegala",
+  "address": "Kuliyapitiya",
+  "password": "TestPass123!"
+}
+
+
+### 75. Reject Public Admin Registration
+POST https://localhost:7234/api/auth/register/start
+Content-Type: application/json
+
+{
+  "role": "Admin",
+  "name": "Test Administrator",
+  "email": "admin@example.com",
+  "contact": "0771234567",
+  "district": "Colombo",
+  "address": "Colombo",
+  "password": "TestPass123!"
+}
+
+
+### 76. Verify OTP - Valid Format
+### This Challenge ID is ONLY a format example.
+POST https://localhost:7234/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "challengeId": "11111111-1111-4111-8111-111111111111",
+  "otp": "123456"
+}
+
+
+### 77. Verify OTP - Invalid Format
+POST https://localhost:7234/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "challengeId": "11111111-1111-4111-8111-111111111111",
+  "otp": "123"
+}
+
+
+### 78. Resend OTP
+POST https://localhost:7234/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "challengeId": "11111111-1111-4111-8111-111111111111"
+}
+
+
+### 79. Test OTP Without Challenge ID
+POST https://localhost:7234/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "otp": "123456"
+}
+
+
+### 80. Get Logged-In Identity Without Token
+GET https://localhost:7234/api/auth/me
+
+
+### 81. AdminService Health
+GET https://localhost:7234/health

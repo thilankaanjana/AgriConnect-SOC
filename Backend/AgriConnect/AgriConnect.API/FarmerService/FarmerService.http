@@ -1,0 +1,325 @@
+
+@host = https://localhost:7231
+
+### Create Supply Request
+POST {{host}}/api/supply-requests
+Content-Type: application/json
+
+{
+  "itemName": "Urea",
+  "quantity": 50.5,
+  "unit": "kg",
+  "district": "Kurunegala",
+  "deliveryLocation": "Pannala",
+  "preferredDate": "2026-12-10T00:00:00"
+}
+
+### Get All Supply Requests
+GET {{host}}/api/supply-requests
+
+### Get Supply Request by ID
+GET {{host}}/api/supply-requests/1
+
+
+
+### Create Crop Listing
+
+POST https://localhost:7231/api/crops
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="Name"
+
+Tomatoes
+--MyBoundary
+Content-Disposition: form-data; name="Qty"
+
+100 kg
+--MyBoundary
+Content-Disposition: form-data; name="Price"
+
+280
+--MyBoundary
+Content-Disposition: form-data; name="Tag"
+
+Organic
+--MyBoundary
+Content-Disposition: form-data; name="Location"
+
+Kurunegala
+--MyBoundary
+Content-Disposition: form-data; name="Contact"
+
+0771234567
+--MyBoundary--
+
+
+### Get Public Crops
+
+GET https://localhost:7231/api/crops
+
+
+### Get My Crops
+
+GET https://localhost:7231/api/crops/my
+
+
+### Mark Crop Sold Out
+
+PUT https://localhost:7231/api/crops/1/sold-out
+
+
+### Relist Crop
+
+PUT https://localhost:7231/api/crops/1/relist
+
+
+### Delete Crop
+
+DELETE https://localhost:7231/api/crops/1
+
+
+
+### Validate Farmer Registration
+
+POST https://localhost:7231/api/farmers/validate-registration
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "email": "kamal@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala, Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+
+### Get Farmer Profile
+
+GET https://localhost:7231/api/farmers/me
+
+
+### Update Farmer Profile
+
+PUT https://localhost:7231/api/farmers/me
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "email": "kamal@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala, Kurunegala"
+}
+
+
+### Test Invalid Profile Data
+
+PUT https://localhost:7231/api/farmers/me
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "email": "invalid-email",
+  "contact": "123",
+  "district": "Kurunegala",
+  "address": "Pannala"
+}
+
+
+
+### Get Farmer Orders
+
+GET https://localhost:7231/api/orders
+
+
+### Get Order by ID
+
+GET https://localhost:7231/api/orders/1
+
+
+### Create Farmer Order
+
+POST https://localhost:7231/api/orders
+Content-Type: application/json
+
+{
+  "supplyRequestId": 1,
+  "quotationId": 1
+}
+
+
+
+### Get Farmer Dashboard
+
+GET https://localhost:7231/api/farmer-dashboard
+
+
+  
+
+### Get Farmer Quotations
+
+GET https://localhost:7231/api/farmer-quotations
+
+
+  
+### Create Buyer Crop Order
+
+POST https://localhost:7231/api/crop-orders
+Content-Type: application/json
+
+{
+  "cropId": 1,
+  "buyerName": "Nimal Perera",
+  "buyerPhone": "0771234567",
+  "quantity": 5,
+  "buyerAddress": "Kurunegala",
+  "note": "Please contact before delivery"
+}
+
+
+### Get My Buyer Orders
+
+GET https://localhost:7231/api/crop-orders/my
+
+
+### Accept Buyer Order
+
+PATCH https://localhost:7231/api/crop-orders/1/status
+Content-Type: application/json
+
+{
+  "status": "Accepted"
+}
+
+
+### Complete Buyer Order
+
+PATCH https://localhost:7231/api/crop-orders/1/status
+Content-Type: application/json
+
+{
+  "status": "Completed"
+}
+
+
+### Decline Buyer Order
+
+PATCH https://localhost:7231/api/crop-orders/1/status
+Content-Type: application/json
+
+{
+  "status": "Declined"
+}
+
+
+
+### Test CORS Preflight
+
+OPTIONS https://localhost:7231/api/crops
+Origin: https://localhost:44332
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type
+
+
+  
+### Test Public API
+
+GET https://localhost:7231/health
+
+
+### Test Protected Farmer Dashboard
+
+GET https://localhost:7231/api/farmer-dashboard
+
+
+
+### Public Health API
+GET https://localhost:7231/health
+
+
+### Protected Supply Requests
+GET https://localhost:7231/api/supply-requests
+
+
+### Protected Farmer Orders
+GET https://localhost:7231/api/orders
+
+
+### Protected Farmer Quotations
+GET https://localhost:7231/api/farmer-quotations
+
+
+
+### 1. Get All Marketplace Crops
+GET https://localhost:7231/api/marketplace/crops
+
+
+### 2. Search Crops - Tomato
+GET https://localhost:7231/api/marketplace/crops?q=tomato
+
+
+### 3. Filter Vegetables
+GET https://localhost:7231/api/marketplace/crops?cat=Vegetables
+
+
+### 4. Filter Fruits
+GET https://localhost:7231/api/marketplace/crops?cat=Fruits
+
+
+### 5. Filter Grains
+GET https://localhost:7231/api/marketplace/crops?cat=Grains
+
+
+### 6. Filter Price Under Rs.200
+GET https://localhost:7231/api/marketplace/crops?pr=lt200
+
+
+### 7. Filter Price Rs.200-400
+GET https://localhost:7231/api/marketplace/crops?pr=200-400
+
+
+### 8. Filter Organic Crops
+GET https://localhost:7231/api/marketplace/crops?tag=Organic
+
+
+### 9. Filter Pesticide-Free Crops
+GET https://localhost:7231/api/marketplace/crops?tag=Pesticide-free
+
+
+### 10. Sort Price Low to High
+GET https://localhost:7231/api/marketplace/crops?sort=priceasc
+
+
+### 11. Sort Price High to Low
+GET https://localhost:7231/api/marketplace/crops?sort=pricedesc
+
+
+### 12. Combined Marketplace Filters
+GET https://localhost:7231/api/marketplace/crops?q=tomato&cat=Vegetables&pr=200-400&tag=Organic&sort=priceasc
+
+
+### 13. Get Crop Details
+GET https://localhost:7231/api/marketplace/crops/1
+
+
+### 14. Get Marketplace Homepage Statistics
+GET https://localhost:7231/api/marketplace/stats
+
+
+### 15. Test Invalid Category
+GET https://localhost:7231/api/marketplace/crops?cat=Electronics
+
+
+### 16. Test Invalid Sorting
+GET https://localhost:7231/api/marketplace/crops?sort=random
+
+
+### 17. Test Invalid Price Range
+GET https://localhost:7231/api/marketplace/crops?pr=100-300
+
+
+### 18. Test Invalid Crop ID
+GET https://localhost:7231/api/marketplace/crops/0

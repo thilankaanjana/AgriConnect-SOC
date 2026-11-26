@@ -1,0 +1,339 @@
+
+@host = https://localhost:7233
+
+### 1. OfficerService Health Test
+GET {{host}}/health
+
+
+### 2. Validate Officer Account
+### Requires Admin JWT
+POST {{host}}/api/officers/validate-create
+Content-Type: application/json
+
+{
+  "name": "Nimal Perera",
+  "email": "officer@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+### 3. Create Officer Account
+### Requires Admin JWT
+POST {{host}}/api/officers
+Content-Type: application/json
+
+{
+  "name": "Nimal Perera",
+  "email": "officer@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+### 4. Get Officer Profile
+### Requires Officer JWT
+GET {{host}}/api/officers/me
+
+
+### 5. Test Invalid Officer Registration
+### Requires Admin JWT
+POST {{host}}/api/officers/validate-create
+Content-Type: application/json
+
+{
+  "name": "Nimal Perera",
+  "email": "officer@example.com",
+  "contact": "123",
+  "district": "Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+### 6. Officer Login - Valid Format
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": "TestPass123!"
+}
+
+
+### 7. Officer Login - Invalid Mobile
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "123",
+  "password": "TestPass123!"
+}
+
+
+### 8. Officer Login - Empty Password
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": ""
+}
+
+
+### 9. Verify OTP - Valid Format
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123456"
+}
+
+
+### 10. Verify OTP - Invalid Format
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123"
+}
+
+
+### 11. Resend OTP
+POST {{host}}/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567"
+}
+
+
+### 12. Resend OTP - Invalid Mobile
+POST {{host}}/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "contact": "123"
+}
+
+
+
+### 20. Get Assigned Requests for Verification
+GET https://localhost:7233/api/verifications/requests
+
+
+### 21. Get Request Review Details
+GET https://localhost:7233/api/verifications/requests/1
+
+
+### 22. Get Quotations for Verification
+GET https://localhost:7233/api/verifications/quotations
+
+
+### 23. Get Quotation Review Details
+GET https://localhost:7233/api/verifications/quotations/1
+
+
+### 24. Get Compliance Checklists
+GET https://localhost:7233/api/verifications/checklists
+
+
+### 25. Approve Supply Request
+POST https://localhost:7233/api/verifications/requests/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Approved",
+  "passedCheckIds": [1, 2, 3],
+  "note": "All compliance requirements satisfied."
+}
+
+
+### 26. Reject Supply Request
+POST https://localhost:7233/api/verifications/requests/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Rejected",
+  "passedCheckIds": [1],
+  "note": "Requested quantity is not suitable."
+}
+
+
+### 27. Approve Supplier Quotation
+POST https://localhost:7233/api/verifications/quotations/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Approved",
+  "passedCheckIds": [1, 2, 3],
+  "note": "Price, stock and delivery are acceptable."
+}
+
+
+### 28. Reject Supplier Quotation
+POST https://localhost:7233/api/verifications/quotations/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Rejected",
+  "passedCheckIds": [1, 3],
+  "note": "Supplier stock is insufficient."
+}
+
+
+### 29. Test Approval with Incomplete Checklist
+POST https://localhost:7233/api/verifications/requests/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Approved",
+  "passedCheckIds": [1, 2],
+  "note": ""
+}
+
+
+### 30. Test Rejection without Note
+POST https://localhost:7233/api/verifications/quotations/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Rejected",
+  "passedCheckIds": [1],
+  "note": ""
+}
+
+
+### 31. Test Invalid Decision
+POST https://localhost:7233/api/verifications/requests/1/decision
+Content-Type: application/json
+
+{
+  "decision": "Cancelled",
+  "passedCheckIds": [1, 2, 3],
+  "note": ""
+}
+
+
+  
+### 32. Get Complete Compliance Dashboard
+GET https://localhost:7233/api/compliance
+
+
+### 33. Get Compliance Statistics
+GET https://localhost:7233/api/compliance/summary
+
+
+### 34. Get Verification History
+GET https://localhost:7233/api/compliance/history
+
+
+### 35. Get Supplier Compliance
+GET https://localhost:7233/api/compliance/suppliers
+
+
+### 36. Public OfficerService Health
+GET https://localhost:7233/health
+
+
+  
+### 37. Get Officer Dashboard
+GET https://localhost:7233/api/officer-dashboard
+
+
+### 38. Test Officer Dashboard Without Token
+GET https://localhost:7233/api/officer-dashboard
+
+
+### 39. Test Officer Health API
+GET https://localhost:7233/health
+
+
+
+### 40. Public Health Test
+GET https://localhost:7233/health
+
+
+### 41. Public Guidelines Test
+GET https://localhost:7233/api/guidelines?limit=4
+
+
+### 42. Protected Officer Dashboard
+GET https://localhost:7233/api/officer-dashboard
+
+
+### 43. Protected Compliance
+GET https://localhost:7233/api/compliance
+
+
+### 44. Protected Verifications
+GET https://localhost:7233/api/verifications/requests
+
+
+### 45. Protected Recommendations
+GET https://localhost:7233/api/recommendations
+
+
+### 46. Protected Officer Profile
+GET https://localhost:7233/api/officers/me
+
+
+### 47. Test Invalid JWT
+GET https://localhost:7233/api/officer-dashboard
+Authorization: Bearer invalid-token
+
+
+### 48. Test OfficerService CORS
+OPTIONS https://localhost:7233/api/officer-dashboard
+Origin: https://localhost:44332
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: authorization
+
+
+
+
+@officerHost = https://localhost:7233
+
+### Get All Guidelines
+GET https://localhost:7233/api/guidelines
+
+
+### Get Latest 4 Guidelines
+GET https://localhost:7233/api/guidelines
+
+### Get Guideline By ID
+GET {{officerHost}}/api/guidelines/1
+
+
+### Publish Guideline
+### Requires valid Officer JWT
+POST {{officerHost}}/api/guidelines
+Content-Type: application/json
+
+{
+  "title": "Organic Farming",
+  "text": "Use sustainable farming practices."
+}
+
+
+### Edit Guideline
+### Requires valid Officer JWT
+PUT {{officerHost}}/api/guidelines/1
+Content-Type: application/json
+
+{
+  "title": "Organic Farming Guidelines",
+  "text": "Use compost and environmentally friendly methods."
+}
+
+
+### Delete Guideline
+### Requires valid Officer JWT
+DELETE {{officerHost}}/api/guidelines/1
+
+
+### Invalid Guideline Limit
+GET {{officerHost}}/api/guidelines?limit=0

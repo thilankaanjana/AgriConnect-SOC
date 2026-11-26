@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="AdminService/AdminService.csproj" Id="d77c78a5-a9a0-431b-94bb-18dc6a50dc92" />
+  <Project Path="FarmerService/FarmerService.csproj" />
+  <Project Path="OfficerService/OfficerService.csproj" Id="500f5f51-a0f7-4b4d-9b47-61fe70c3f52b" />
+  <Project Path="SupplierService/SupplierService.csproj" Id="d7909e34-fa6b-4d6f-bec1-11358869c1ec" />
+</Solution>

@@ -1,0 +1,259 @@
+
+@host = https://localhost:7232
+
+### 1. Test Supplier Health API
+
+GET {{host}}/health
+
+
+### 2. Validate Supplier Registration
+
+POST {{host}}/api/suppliers/validate-registration
+Content-Type: application/json
+
+{
+  "name": "Lanka Agro Suppliers",
+  "email": "supplier@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala, Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+### 3. Register Supplier
+
+POST {{host}}/api/suppliers/register
+Content-Type: application/json
+
+{
+  "name": "Lanka Agro Suppliers",
+  "email": "supplier@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala, Kurunegala",
+  "password": "TestPass123!"
+}
+
+
+### 4. Supplier Login
+
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "password": "TestPass123!"
+}
+
+
+### 5. Verify Supplier OTP
+
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123456"
+}
+
+
+### 6. Test Invalid OTP
+
+POST {{host}}/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "contact": "0771234567",
+  "otp": "123"
+}
+
+
+### 7. Get Supplier Profile
+
+GET {{host}}/api/suppliers/me
+
+
+### 8. Update Supplier Profile
+
+PUT {{host}}/api/suppliers/me
+Content-Type: application/json
+
+{
+  "name": "Lanka Agro Suppliers",
+  "email": "lankaagro@example.com",
+  "contact": "0771234567",
+  "district": "Kurunegala",
+  "address": "Pannala, Kurunegala"
+}
+
+
+### 9. Test Invalid Profile Data
+
+PUT {{host}}/api/suppliers/me
+Content-Type: application/json
+
+{
+  "name": "Lanka Agro Suppliers",
+  "email": "invalid-email",
+  "contact": "123",
+  "district": "Kurunegala",
+  "address": "Pannala"
+}
+
+
+
+### 10. Get My Inventory
+GET https://localhost:7232/api/inventory
+
+
+### 11. Get Inventory Item
+GET https://localhost:7232/api/inventory/1
+
+
+### 12. Create Inventory Item
+POST https://localhost:7232/api/inventory
+Content-Type: application/json
+
+{
+  "item": "Urea Fertilizer",
+  "qty": 100,
+  "unit": "bags",
+  "price": 8500
+}
+
+
+### 13. Update Inventory Item
+PUT https://localhost:7232/api/inventory/1
+Content-Type: application/json
+
+{
+  "qty": 75,
+  "price": 8200
+}
+
+
+### 14. Delete Inventory Item
+DELETE https://localhost:7232/api/inventory/1
+
+
+### 15. Get Stock History
+GET https://localhost:7232/api/inventory/stock-history
+
+
+### 16. Get Supplier Stock for Farmers
+GET https://localhost:7232/api/inventory/supplier-stock?district=Kurunegala&search=Urea
+
+
+### 17. Test Invalid Inventory Quantity
+POST https://localhost:7232/api/inventory
+Content-Type: application/json
+
+{
+  "item": "Urea Fertilizer",
+  "qty": -10,
+  "unit": "bags",
+  "price": 8500
+}
+
+
+### 18. Test Invalid Inventory Unit
+POST https://localhost:7232/api/inventory
+Content-Type: application/json
+
+{
+  "item": "Urea Fertilizer",
+  "qty": 100,
+  "unit": "boxes",
+  "price": 8500
+}
+
+
+
+### 19. Get Farmer Supply Requests
+
+GET https://localhost:7232/api/quotations/supply-requests
+
+
+### 20. Get Open Requests for Quotation
+
+GET https://localhost:7232/api/quotations/supply-requests?onlyOpen=true
+
+
+### 21. Get My Quotations
+
+GET https://localhost:7232/api/quotations
+
+
+### 22. Get Quotation by ID
+
+GET https://localhost:7232/api/quotations/1
+
+
+### 23. Create Supplier Quotation
+
+POST https://localhost:7232/api/quotations
+Content-Type: application/json
+
+{
+  "requestId": 1,
+  "price": 45000,
+  "stock": 100,
+  "delivery": "3 days"
+}
+
+
+### 24. Update Supplier Quotation
+
+PUT https://localhost:7232/api/quotations/1
+Content-Type: application/json
+
+{
+  "price": 42000,
+  "stock": 100,
+  "delivery": "2 days"
+}
+
+
+### 25. Test Invalid Quotation Price
+
+POST https://localhost:7232/api/quotations
+Content-Type: application/json
+
+{
+  "requestId": 1,
+  "price": -500,
+  "stock": 100,
+  "delivery": "3 days"
+}
+
+
+### 26. Test Invalid Quotation Stock
+
+POST https://localhost:7232/api/quotations
+Content-Type: application/json
+
+{
+  "requestId": 1,
+  "price": 45000,
+  "stock": -10,
+  "delivery": "3 days"
+}
+
+
+### 27. Test Invalid Request ID
+
+POST https://localhost:7232/api/quotations
+Content-Type: application/json
+
+{
+  "requestId": 0,
+  "price": 45000,
+  "stock": 100,
+  "delivery": "3 days"
+}
+
+
+### 36. Get Supplier Dashboard
+
+GET https://localhost:7232/api/supplier-dashboard
