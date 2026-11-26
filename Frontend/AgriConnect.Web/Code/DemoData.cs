@@ -110,21 +110,7 @@ public static class DemoData
     static DemoStore Seed()
     {
         DemoStore s = new DemoStore();
-        const string pw = "agri1234";
-
-        // ----- login accounts only (password for all: agri1234) -----
-        s.Users.Add(new AppUser { Id = 1, Name = "Sunil Perera", Email = "farmer@example.com", Contact = "0771234567", Address = "Nuwara Eliya", District = "Nuwara Eliya", Password = pw, Role = "Farmer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 2, Name = "GreenField Supplies", Email = "supplier@example.com", Contact = "0712345678", Address = "Nuwara Eliya Town", District = "Nuwara Eliya", Password = pw, Role = "Supplier", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 3, Name = "Dr. A. Wickrama", Email = "officer@example.com", Contact = "0701112223", Address = "Agriculture Office, Nuwara Eliya", District = "Nuwara Eliya", Password = pw, Role = "Officer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 4, Name = "System Admin", Email = "admin@example.com", Contact = "0719998887", Address = "Colombo", District = "Colombo", Password = pw, Role = "Admin", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 5, Name = "Kamala Silva", Email = "kamala@example.com", Contact = "0762223334", Address = "Polonnaruwa", District = "Polonnaruwa", Password = pw, Role = "Farmer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 6, Name = "Ruwan Jay", Email = "ruwan@example.com", Contact = "0753334445", Address = "Bandarawela", District = "Badulla", Password = pw, Role = "Farmer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 7, Name = "Nimal Fernando", Email = "nimal@example.com", Contact = "0724445556", Address = "Anuradhapura", District = "Anuradhapura", Password = pw, Role = "Farmer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 8, Name = "AgroMart Lanka", Email = "agromart@example.com", Contact = "0725556667", Address = "Polonnaruwa Town", District = "Polonnaruwa", Password = pw, Role = "Supplier", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 9, Name = "Ms. N. Jayasinghe", Email = "officer2@example.com", Contact = "0703334445", Address = "Agriculture Office, Polonnaruwa", District = "Polonnaruwa", Password = pw, Role = "Officer", Status = "Active" });
-        s.Users.Add(new AppUser { Id = 10, Name = "Highland Agro Traders", Email = "highland@example.com", Contact = "0716667778", Address = "Nuwara Eliya", District = "Nuwara Eliya", Password = pw, Role = "Supplier", Status = "Active" });
-
-        // No sample crops, requests, quotations, orders, stock or notifications: only the login accounts above.
+       
 
 
 
